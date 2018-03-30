@@ -11,7 +11,7 @@ const headlessWallet = require('headless-byteball');
 const texts = require('./modules/texts');
 const reward = require('./modules/reward');
 const conversion = require('./modules/conversion');
-const investorAttestation = require('./modules/attestation');
+const investorAttestation = require('./modules/investor_attestation');
 const notifications = require('./modules/notifications');
 const verifyInvestor = require('./modules/verifyinvestor');
 
