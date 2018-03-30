@@ -357,7 +357,7 @@ function handleTransactionsBecameStable(arrUnits) {
 		(rows) => {
 			rows.forEach((row) => {
 
-				checkUserScrProfileData(row, row.device_address);
+				parseSrcProfile(row, row.device_address);
 
 				db.query(
 					`UPDATE transactions 
@@ -577,7 +577,7 @@ function readUserInfo (device_address, callback) {
 			if (rows.length) {
 				let row = rows[0];
 
-				checkUserScrProfileData(row, device_address);
+				parseSrcProfile(row, device_address);
 
 				callback(row);
 			} else {
@@ -589,7 +589,7 @@ function readUserInfo (device_address, callback) {
 	);
 }
 
-function checkUserScrProfileData(row, device_address) {
+function parseSrcProfile(row, device_address) {
 	if (!conf.bRequireRealName) {
 		row.src_profile = {};
 	} else {
@@ -599,7 +599,7 @@ function checkUserScrProfileData(row, device_address) {
 			try {
 				row.src_profile = JSON.parse(row.src_profile);
 			} catch (err) {
-				notifications.notifyAdmin('error parse src_profile', `device_address: ${device_address}, profile: ${row.src_profile}`);
+				notifications.notifyAdmin('error parsing src_profile', `device_address: ${device_address}, profile: ${row.src_profile}`);
 				row.src_profile = {};
 			}
 		}
