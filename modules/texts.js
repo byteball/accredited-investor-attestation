@@ -99,19 +99,25 @@ exports.paymentIsConfirmed = () => {
 
 exports.clickInvestorLink = (redirectUrl) => {
 	return [
-		`Please click this link to grant the bot access to your verification status on VerifyInvestor.com: ${redirectUrl}\n`,
-		'If you already allowed access, please wait while the bot checks it.'
+		`Please click this link to grant us access to your verification status on VerifyInvestor.com: ${redirectUrl}\n`,
+		'If you already allowed access, please wait while we check it.'
 	].join('');
 };
 
 exports.receivedAuthToUserAccount = () => {
-	return 'The bot received access to your account, and sent verification request.';
+	return 'We received access to updates about your verification status, and sent a verification request.';
 };
 
-exports.waitingWhileVerificationRequestFinished = () => {
+exports.verificationStarted = () => {
 	return [
-		'Please complete verification request.\n',
-		'If you already completed verification request, please wait while the bot checks it.'
+		'Please complete your verification, we\'ll update you about the status.',
+	].join('');
+};
+
+exports.waitingWhileVerificationUnderWay = () => {
+	return [
+		'Your verification is under way.\n',
+		'If you have already completed the verification, please wait we check its result.'
 	].join('');
 };
 

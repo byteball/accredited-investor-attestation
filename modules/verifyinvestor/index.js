@@ -118,7 +118,7 @@ function checkAuthAndPostVerificationRequest(transaction_id, device_address, use
 						device.sendMessageToDevice(
 							device_address,
 							'text',
-							texts.receivedAuthToUserAccount() + '\n\n' + texts.waitingWhileVerificationRequestFinished()
+							texts.receivedAuthToUserAccount() + '\n\n' + texts.verificationStarted()
 						);
 					});
 

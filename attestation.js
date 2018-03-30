@@ -490,7 +490,7 @@ function respond (from_address, text, response = '') {
 						let row = rows[0];
 
 						/**
-						 * if user payed, but transaction did not become stable
+						 * if user paid, but transaction did not become stable
 						 */
 						if (row.is_confirmed === 0) {
 							return device.sendMessageToDevice(
@@ -515,7 +515,7 @@ function respond (from_address, text, response = '') {
 							return device.sendMessageToDevice(
 								from_address,
 								'text',
-								(response ? response + '\n\n' : '') + texts.waitingWhileVerificationRequestFinished()
+								(response ? response + '\n\n' : '') + texts.waitingWhileVerificationUnderWay()
 							)
 						}
 
