@@ -82,14 +82,6 @@ exports.pleasePay = (receivingAddress, price, user_address) => {
 	return `Please pay for the attestation: [attestation payment](byteball:${receivingAddress}?amount=${price}&single_address=single${user_address}).`;
 };
 
-exports.receivedPaymentFromMultipleAddresses = () => {
-	return "Received a payment but looks like it was not sent from a single-address wallet.";
-};
-
-exports.receivedPaymentNotFromExpectedAddress = (address) => {
-	return `Received a payment but it was not sent from the expected address ${address}.`;
-};
-
 exports.switchToSingleAddress = () => {
 	return [
 		"Make sure you are in a single-address wallet, ",
