@@ -128,20 +128,20 @@ function checkAuthAndPostVerificationRequest(transaction_id, device_address, use
 	});
 }
 
-exports.retryCheckVerificationRequests = (onDone) => {
+exports.pollVerificationResults = (handleVerificationResult) => {
 	db.query(
 		`SELECT transaction_id, device_address, vi_user_id, vi_vr_id
 		FROM transactions JOIN receiving_addresses USING(receiving_address)
 		WHERE vi_status = 'in_verification'`,
 		(rows) => {
 			rows.forEach((row) => {
-				checkUserVerificationRequest(row.transaction_id, row.device_address, row.vi_user_id, row.vi_vr_id, onDone);
+				checkUserVerificationRequest(row.transaction_id, row.device_address, row.vi_user_id, row.vi_vr_id, handleVerificationResult);
 			});
 		}
 	);
 };
 
-function checkUserVerificationRequest(transaction_id, device_address, vi_user_id, vi_vr_id, onDone = () => {}) {
+function checkUserVerificationRequest(transaction_id, device_address, vi_user_id, vi_vr_id, handleResult = () => {}) {
 	const mutex = require('byteballcore/mutex.js');
 	const device = require('byteballcore/device.js');
 	mutex.lock(['tx-' + transaction_id], (unlock) => {
@@ -155,13 +155,13 @@ function checkUserVerificationRequest(transaction_id, device_address, vi_user_id
 				let row = rows[0];
 				if (row.vi_status !== 'in_verification') {
 					unlock();
-					return onDone(null, false);
+					return handleResult(null, false);
 				}
 
 				api.getStatusOfVerificationRequest(vi_user_id, vi_vr_id, (err, statusCode, vi_vr_status) => {
 					if (err) {
 						unlock();
-						return onDone(err);
+						return handleResult(err);
 					}
 
 					// verify investor user or verification request does not exist, or API user is not authorized to check
@@ -172,13 +172,13 @@ function checkUserVerificationRequest(transaction_id, device_address, vi_user_id
 							if (err) {
 								notifications.notifyAdmin(`sendRequest api error`, err);
 								unlock();
-								return onDone(err);
+								return handleResult(err);
 							}
 
 							if (response.statusCode !== 200) {
 								notifications.notifyAdmin(`sendRequest api statusCode ${response.statusCode}`, body);
 								unlock();
-								return onDone(response.statusCode);
+								return handleResult(response.statusCode);
 							}
 
 							return db.query(
@@ -188,7 +188,7 @@ function checkUserVerificationRequest(transaction_id, device_address, vi_user_id
 								[transaction_id],
 								() => {
 									unlock();
-									onDone(null, false);
+									handleResult(null, false);
 								}
 							);
 
@@ -203,7 +203,7 @@ function checkUserVerificationRequest(transaction_id, device_address, vi_user_id
 							[transaction_id],
 							() => {
 								unlock();
-								onDone(null, false);
+								handleResult(null, false);
 							}
 						);
 					}
@@ -213,12 +213,12 @@ function checkUserVerificationRequest(transaction_id, device_address, vi_user_id
 						// may be it will be new status in service
 						notifications.notifyAdmin(`getVerReqStatusDescription`, `Status ${vi_vr_status} not found`);
 						unlock();
-						return onDone(null, false);
+						return handleResult(null, false);
 					}
 
 					if (exports.checkIfVerificationRequestStatusIsNeutral(vi_vr_status)) {
 						unlock();
-						return onDone(null, false);
+						return handleResult(null, false);
 					}
 
 					let strNewVIStatus;
@@ -237,7 +237,7 @@ function checkUserVerificationRequest(transaction_id, device_address, vi_user_id
 						[strNewVIStatus, vi_vr_status, transaction_id],
 						() => {
 							unlock();
-							onDone(null, strNewVIStatus === 'accredited' ? transaction_id : false);
+							handleResult(null, strNewVIStatus === 'accredited' ? transaction_id : false);
 						}
 					);
 					device.sendMessageToDevice(device_address, 'text', text);

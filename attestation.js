@@ -104,7 +104,7 @@ function handleWalletReady() {
 				console.log('== distribution address: ' + address2);
 				reward.distributionAddress = address2;
 
-				server.setHandlerCheckVerificationRequest(handleCheckVerificationRequest);
+				server.setHandlerForVerificationResult(handleVerificationResult);
 				server.listen(conf.webPort, () => {
 					console.log(`== server start listen on ${conf.webPort} port`);
 				});
@@ -113,17 +113,17 @@ function handleWalletReady() {
 				setInterval(reward.retrySendingRewards, 10*1000);
 				setInterval(moveFundsToAttestorAddresses, 60*1000);
 				setInterval(verifyInvestor.retryCheckAuthAndPostVerificationRequest, 60*1000);
-				setInterval(retryCheckVerificationRequests, 600*1000);
+				setInterval(pollVerificationResults, 600*1000);
 			});
 		});
 	});
 }
 
-function retryCheckVerificationRequests() {
-	verifyInvestor.retryCheckVerificationRequests(handleCheckVerificationRequest);
+function pollVerificationResults() {
+	verifyInvestor.pollVerificationResults(handleVerificationResult);
 }
 
-function handleCheckVerificationRequest(err, transaction_id) {
+function handleVerificationResult(err, transaction_id) {
 	if (err || !transaction_id) {
 		return;
 	}

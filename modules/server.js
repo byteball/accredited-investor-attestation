@@ -8,8 +8,8 @@ const texts = require('./texts');
 const app = express();
 const server = require('http').Server(app);
 
-let handles = {
-	checkVerificationRequest: () => {}
+let handlers = {
+	handleVerificationResult: () => {}
 };
 
 app.use(bodyParser.urlencoded({ extended: false }));
@@ -52,7 +52,7 @@ app.post('*/cb', (req, res) => {
 						let row = rows[0];
 						if (row.vi_status !== 'in_verification') {
 							unlock();
-							return handles.checkVerificationRequest(null, false);
+							return handlers.handleVerificationResult(null, false);
 						}
 
 						let vrStatusDescription = verifyInvestor.getVerReqStatusDescription(vi_vr_status);
@@ -60,12 +60,12 @@ app.post('*/cb', (req, res) => {
 							// may be it will be new status in service
 							notifications.notifyAdmin(`getVerReqStatusDescription`, `Status ${vi_vr_status} not found`);
 							unlock();
-							return handles.checkVerificationRequest(null, false);
+							return handlers.handleVerificationResult(null, false);
 						}
 
 						if (verifyInvestor.checkIfVerificationRequestStatusIsNeutral(vi_vr_status)) {
 							unlock();
-							return handles.checkVerificationRequest(null, false);
+							return handlers.handleVerificationResult(null, false);
 						}
 
 						let strNewVIStatus;
@@ -84,7 +84,7 @@ app.post('*/cb', (req, res) => {
 							[strNewVIStatus, vi_vr_status, transaction_id],
 							() => {
 								unlock();
-								handles.checkVerificationRequest(null, strNewVIStatus === 'accredited' ? transaction_id : false);
+								handlers.handleVerificationResult(null, strNewVIStatus === 'accredited' ? transaction_id : false);
 							}
 						);
 
@@ -99,8 +99,8 @@ app.post('*/cb', (req, res) => {
 	res.status(200).end();
 });
 
-server.setHandlerCheckVerificationRequest = (handler) => {
-	handles.checkVerificationRequest = handler;
+server.setHandlerForVerificationResult = (handler) => {
+	handlers.handleVerificationResult = handler;
 };
 
 module.exports = server;

@@ -79,11 +79,11 @@ exports.postVerificationRequest = (vi_user_id, user_address, onDone) => {
 
 exports.getStatusOfVerificationRequest = (vi_user_id, vi_vr_id, onDone) => {
 	sendRequest(
-		getUrnByKey('verify_user_request', vi_user_id, vi_vr_id),
+		getUrnByKey('get_status', vi_user_id, vi_vr_id),
 		(err, response, body) => {
 			console.error('getStatusOfVerificationRequest', vi_user_id, vi_vr_id, err, response.statusCode, body);
 			if (err) {
-				notifications.notifyAdmin(`verifyinvestor api checkUserVerifyRequest: ${vi_user_id} ${vi_vr_id} err`, err);
+				notifications.notifyAdmin(`verifyinvestor api get_status: ${vi_user_id} ${vi_vr_id} err`, err);
 				return onDone(err);
 			}
 
@@ -92,14 +92,14 @@ exports.getStatusOfVerificationRequest = (vi_user_id, vi_vr_id, onDone) => {
 				if (statusCode === 404) {
 					return onDone(null, statusCode, null);
 				} else {
-					notifications.notifyAdmin(`verifyinvestor api checkUserVerifyRequest: ${vi_user_id} ${vi_vr_id} statusCode ${statusCode}`, body);
+					notifications.notifyAdmin(`verifyinvestor api get_status: ${vi_user_id} ${vi_vr_id} statusCode ${statusCode}`, body);
 					return onDone(statusCode);
 				}
 
 			}
 
 			if (!body || !body.id || body.id !== vi_vr_id || !body.status) {
-				notifications.notifyAdmin(`verifyinvestor api checkUserVerifyRequest: ${vi_user_id} ${vi_vr_id} body`, body);
+				notifications.notifyAdmin(`verifyinvestor api get_status: ${vi_user_id} ${vi_vr_id} body`, body);
 				return onDone('wrong body');
 			}
 
@@ -131,7 +131,7 @@ function getUrnByKey(key) {
 			if (!arguments[1]) throw new Error('require set user id');
 			return `/api/v1/users/${arguments[1]}/verification_requests`
 		}
-		case 'verify_user_request': {
+		case 'get_status': {
 			if (!arguments[1]) throw new Error('require set user id');
 			if (!arguments[2]) throw new Error('require set verification request id');
 			return `/api/v1/users/${arguments[1]}/verification_requests/${arguments[2]}`;
