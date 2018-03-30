@@ -38,10 +38,10 @@ CREATE TABLE transactions (
 	is_confirmed INT NOT NULL DEFAULT 0,
 	confirmation_date TIMESTAMP NULL,
 	vi_status TEXT NOT NULL DEFAULT 'not_ready',
-  vi_user_id INTEGER NULL,
-  vi_vr_id INTEGER NULL,
-  vi_vr_status CHAR(64) NULL, -- verification request real status
-  result_date TIMESTAMP NULL,
+	vi_user_id INTEGER NULL,
+	vi_vr_id INTEGER NULL,
+	vi_vr_status CHAR(64) NULL, -- verification request real status
+	result_date TIMESTAMP NULL,
 	FOREIGN KEY (receiving_address) REFERENCES receiving_addresses(receiving_address),
 	FOREIGN KEY (payment_unit) REFERENCES units(unit) ON DELETE CASCADE,
 	FOREIGN KEY (vi_status) REFERENCES transaction_verify_investor_statuses(name)
@@ -85,8 +85,8 @@ CREATE TABLE reward_units (
 CREATE TABLE referral_reward_units (
 	transaction_id INTEGER NOT NULL PRIMARY KEY,
 	user_address CHAR(32) NOT NULL,
-	vi_user_id CHAR(44) NOT NULL,
-  new_vi_user_id CHAR(44) NOT NULL UNIQUE,
+	vi_user_id INTEGER NOT NULL,
+	new_vi_user_id INTEGER NOT NULL UNIQUE,
 	new_user_address CHAR(44) NOT NULL UNIQUE,
 	reward INT NOT NULL,
 	reward_unit CHAR(44) NULL UNIQUE,

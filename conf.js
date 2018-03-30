@@ -12,7 +12,7 @@ exports.storage = 'sqlite';
 //exports.socksPort = 9050;
 
 exports.hub = 'byteball.org/bb';
-exports.deviceName = 'Investors attestation bot';
+exports.deviceName = 'Accredited Investor Attestation Bot';
 exports.permanent_pairing_secret = '0000';
 exports.control_addresses = [''];
 exports.payout_address = 'WHERE THE MONEY CAN BE SENT TO';
@@ -38,11 +38,11 @@ exports.verifyInvestorApiToken = '';
 exports.verifyInvestorUserAuthorizationToken = '';
 
 // finance
-exports.priceInUSD = 8;
-exports.rewardInUSD = 20;
+exports.priceInUSD = 79;
+exports.rewardInUSD = 79;
 exports.referralRewardInUSD = 20;
 
-exports.PRICE_TIMEOUT = 3600; // in seconds
+exports.PRICE_TIMEOUT = 24*3600; // in seconds
 
 exports.bRequireRealName = true;
 exports.arrRealNameAttestors = ['I2ADHGP4HL6J37NQAD73J7E5SKFIXJOT'];

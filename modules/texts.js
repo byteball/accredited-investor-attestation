@@ -8,17 +8,16 @@ const conf = require('byteballcore/conf');
  */
 exports.greeting = () => {
 	return [
-		"Here you can attest your byteball addresses as investor.\n",
-		"A proof of attestation will be posted publicly on the distributed ledger.\n\n",
+		"Here you can attest yourself as accredited investor.  This will allow you to invest in ICOs that are available for accredited investors only\n",
+		"A proof of attestation of your Byteball address will be posted publicly on the distributed ledger.  Your name will not be published.\n\n",
 
 		`The price of attestation is $${conf.priceInUSD.toLocaleString([], {minimumFractionDigits: 2})}. `,
 		"The payment is nonrefundable even if the attestation fails for any reason.\n\n",
 
-		'After payment, you will receive a link to VerifyInvestor service ',
-		'in order to allow the bot to receive an access to your account. ',
-		'And then, you will receive verification request, that you need to complete.\n\n',
+		'After payment, you will receive a link to VerifyInvestor.com service ',
+		'that you will use to prove your accredited status. ',
 
-		`After you successfully attestation for the first time, `,
+		`After you successfully complete attestation for the first time, `,
 		`you receive a $${conf.rewardInUSD.toLocaleString([], {minimumFractionDigits: 2})} reward in Bytes.`
 	].join('');
 };
@@ -41,11 +40,11 @@ exports.insertMyAddress = () => {
 			arrNamesOfRequiredKeys.push(objMap[key].name);
 		}
 		return [
-			'To participate in this attestation, your real name has to be attested and we require to provide your private profile, ',
-			`which includes your: ${arrNamesOfRequiredKeys.join(', ')}.\n`,
+			'To attest your accredited investor status, your real name has to be attested first and we\'ll require to provide your private profile, ',
+			`which includes your ${arrNamesOfRequiredKeys.join(', ')}.\n`,
 			'If you are not attested yet, find "Real name attestation bot" in the Bot Store and have your address attested.\n',
 			`If you are already attested, click this link to reveal your private profile to us: [profile request](profile-request:${conf.arrRequiredPersonalData.join(',')}). `,
-			'We\'ll keep your personal data private and only send it to VerifyInvestor service.'
+			'We\'ll keep your personal data private and only send it to VerifyInvestor.com service.'
 		].join('');
 	} else {
 		return [
@@ -108,8 +107,8 @@ exports.paymentIsConfirmed = () => {
 
 exports.clickInvestorLink = (redirectUrl) => {
 	return [
-		`Please click this link to grant bot access to your verification status: ${redirectUrl}\n`,
-		'If you already allowed access, please wait, while the bot check it.'
+		`Please click this link to grant the bot access to your verification status on VerifyInvestor.com: ${redirectUrl}\n`,
+		'If you already allowed access, please wait while the bot checks it.'
 	].join('');
 };
 
@@ -120,7 +119,7 @@ exports.receivedAuthToUserAccount = () => {
 exports.waitingWhileVerificationRequestFinished = () => {
 	return [
 		'Please complete verification request.\n',
-		'If you already completed verification request, please wait, while the bot check it.'
+		'If you already completed verification request, please wait while the bot checks it.'
 	].join('');
 };
 
@@ -129,7 +128,7 @@ exports.verificationRequestCompletedWithStatus = (statusDescription) => {
 };
 
 exports.inAttestation = () => {
-	return `Verification request was confirmed. You are in attestation. Please, wait.`;
+	return `Verification request was confirmed. You are in attestation. Please wait.`;
 };
 
 exports.attestedSuccessFirstTimeBonus = (rewardInBytes) => {

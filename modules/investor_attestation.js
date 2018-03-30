@@ -57,7 +57,7 @@ function postAndWriteAttestation(transaction_id, attestor_address, attestation_p
 						[unit, transaction_id],
 						() => {
 							let device = require('byteballcore/device.js');
-							let text = `Now you are attested investor, see the attestation unit: https://explorer.byteball.org/#${unit}`;
+							let text = `Now you are attested as accredited investor, see the attestation unit: https://explorer.byteball.org/#${unit}`;
 
 							text += "\n\n" + texts.weHaveReferralProgram();
 							device.sendMessageToDevice(row.device_address, 'text', text);
