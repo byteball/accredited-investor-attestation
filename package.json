@@ -1,8 +1,8 @@
 {
-  "name": "byteball-investors-attestation-bot",
+  "name": "accredited-investor-attestation",
   "version": "1.0.0",
-  "main": "index.js",
-  "repository": "https://github.com/temikng/byteball-investors-attestation-bot.git",
+  "main": "attestation.js",
+  "repository": "https://github.com/byteball/accredited-investor-attestation.git",
   "author": "temikn <temikng@gmail.com>",
   "license": "MIT",
   "dependencies": {
