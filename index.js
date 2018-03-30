@@ -171,7 +171,7 @@ function handleCheckVerificationRequest(err, transaction_id) {
 
 								if (conf.referralRewardInUSD) {
 									let referralRewardInBytes = conversion.getPriceInBytes(conf.referralRewardInUSD);
-									reward.findReferral(row.payment_unit, (referring_vi_user_id, referring_user_address, referring_user_device_address) => {
+									reward.findReferrer(row.payment_unit, (referring_vi_user_id, referring_user_address, referring_user_device_address) => {
 										if (!referring_user_address) {
 											// console.error("no referring user for " + row.user_address);
 											return console.log("no referring user for " + row.user_address);
