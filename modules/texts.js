@@ -175,10 +175,6 @@ exports.errorConfigEmail = () => {
 	return `please specify admin_email and from_email in your ${desktopApp.getAppDataDir()}/conf.json\n`;
 };
 
-exports.errorConfigSalt = () => {
-	return `please specify salt in your ${desktopApp.getAppDataDir()}/conf.json\n`;
-};
-
 exports.errorConfigVerifyInvestorToken = () => {
 	return `please specify verifyInvestorApiToken and verifyInvestorUserAuthorizationToken in your ${desktopApp.getAppDataDir()}/conf.json`;
 };

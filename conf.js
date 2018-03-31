@@ -61,5 +61,3 @@ exports.arrRequiredPersonalData = Object.keys(exports.objMapRequiredVIPersonalDa
 // server
 exports.webPort = 8080;
 
-// set this in conf.json
-exports.salt = null;

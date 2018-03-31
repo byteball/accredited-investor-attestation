@@ -84,9 +84,6 @@ function handleWalletReady() {
 		if (!conf.admin_email || !conf.from_email) {
 			error += texts.errorConfigEmail();
 		}
-		if (!conf.salt) {
-			error += texts.errorConfigSalt();
-		}
 		if (!conf.verifyInvestorApiToken || !conf.verifyInvestorUserAuthorizationToken) {
 			error += texts.errorConfigVerifyInvestorToken();
 		}
