@@ -155,8 +155,10 @@ function checkUserVerificationRequest(transaction_id, device_address, vi_user_id
 	mutex.lock(['tx-' + transaction_id], (unlock) => {
 		db.query(
 			`SELECT 
-				vi_status
+				vi_status,
+				(SELECT src_profile FROM private_profiles WHERE private_profiles.address = receiving_addresses.user_address LIMIT 1) AS src_profile
 			FROM transactions
+			JOIN receiving_addresses USING(receiving_address)
 			WHERE transaction_id=?`,
 			[transaction_id],
 			(rows) => {
@@ -165,8 +167,15 @@ function checkUserVerificationRequest(transaction_id, device_address, vi_user_id
 					unlock();
 					return handleResult(null, false);
 				}
+				
+				srcProfile.parseSrcProfile(row);
+				let src_profile = row.src_profile;
+				let expected_legal_name = '';
+				if (src_profile.first_name && src_profile.last_name)
+					expected_legal_name = src_profile.first_name[0] + ' ' + src_profile.last_name[0];
+				expected_legal_name = expected_legal_name.toUpperCase();
 
-				api.getStatusOfVerificationRequest(vi_user_id, vi_vr_id, (err, statusCode, vi_vr_status) => {
+				api.getStatusOfVerificationRequest(vi_user_id, vi_vr_id, (err, statusCode, vi_vr_status, legal_name) => {
 					if (err) {
 						unlock();
 						return handleResult(err);
@@ -233,6 +242,8 @@ function checkUserVerificationRequest(transaction_id, device_address, vi_user_id
 					let text = texts.verificationRequestCompletedWithStatus(vrStatusDescription);
 					if (vi_vr_status === 'accredited') {
 						strNewVIStatus = 'accredited';
+						if (legal_name !== expected_legal_name)
+							notifications.notifyAdmin('legal name changed', "Tx: "+transaction_id+"\nExpected: "+expected_legal_name+"\nGot: "+legal_name);
 					} else {
 						strNewVIStatus = 'not_accredited';
 						text += '\n\n' + texts.currentAttestationFailed();

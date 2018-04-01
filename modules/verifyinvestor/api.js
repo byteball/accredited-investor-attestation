@@ -104,7 +104,7 @@ exports.getStatusOfVerificationRequest = (vi_user_id, vi_vr_id, onDone) => {
 				return onDone('wrong body');
 			}
 
-			return onDone(null, statusCode, body.status);
+			return onDone(null, statusCode, body.status, body.legal_name);
 		}
 	);
 };
