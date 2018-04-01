@@ -127,7 +127,7 @@ function getAttestationPayload(user_address, vi_user_id) {
 		address: user_address,
 		profile: {
 			vi_user_id,
-			investor: 1
+			accredited: 1
 		}
 	};
 }
