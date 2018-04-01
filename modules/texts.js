@@ -8,7 +8,7 @@ const conf = require('byteballcore/conf');
  */
 exports.greeting = () => {
 	return [
-		"Here you can attest yourself as accredited investor.  This will allow you to invest in ICOs that are available for accredited investors only\n",
+		"Here you can attest yourself as accredited investor.  This will allow you to invest in ICOs that are available for accredited investors only.\n",
 		"A proof of attestation of your Byteball address will be posted publicly on the distributed ledger.  Your name will not be published.\n\n",
 
 		`The price of attestation is $${conf.priceInUSD.toLocaleString([], {minimumFractionDigits: 2})}. `,
@@ -105,12 +105,12 @@ exports.clickInvestorLink = (redirectUrl) => {
 };
 
 exports.receivedAuthToUserAccount = () => {
-	return 'We received access to updates about your verification status, and sent a verification request.';
+	return 'We received access to updates about your verification status at VerifyInvestor.com, and submitted a verification request.';
 };
 
 exports.verificationStarted = () => {
 	return [
-		'Please complete your verification, we\'ll update you about the status.',
+		'Please check your dashboard at VerifyInvestor.com and complete the pending verification, we\'ll update you about the status.',
 	].join('');
 };
 

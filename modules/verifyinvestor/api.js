@@ -46,14 +46,15 @@ exports.checkAuthAndGetVerifyInvestorUserId = (identifier, onDone) => {
 	);
 };
 
-exports.postVerificationRequest = (vi_user_id, user_address, onDone) => {
+exports.postVerificationRequest = (vi_user_id, user_address, src_profile, onDone) => {
 	sendRequest(
 		{
 			method: 'POST',
 			urn: getUrnByKey('user_verification_requests', vi_user_id),
 			form: {
-				deal_name: `byteball address ${user_address}`,
-				legal_name: `byteball address ${user_address}`
+			//	deal_name: `Byteball address ${user_address}`,
+				deal_name: `Security tokens`,
+				legal_name: (src_profile.first_name && src_profile.last_name) ? src_profile.first_name[0] + ' ' + src_profile.last_name[0] : ''
 			}
 		}, (err, response, body) => {
 			if (err) {

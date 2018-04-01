@@ -63,7 +63,7 @@ app.post('*/cb', (req, res) => {
 							return handlers.handleVerificationResult(null, false);
 						}
 
-						if (verifyInvestor.checkIfVerificationRequestStatusIsNeutral(vi_vr_status)) {
+						if (verifyInvestor.checkIfVerificationRequestStatusIsPending(vi_vr_status)) {
 							unlock();
 							return handlers.handleVerificationResult(null, false);
 						}

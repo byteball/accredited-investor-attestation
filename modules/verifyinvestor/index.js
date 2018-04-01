@@ -3,7 +3,8 @@
 const db = require('byteballcore/db');
 const conf = require('byteballcore/conf');
 const api = require('./api');
-const texts = require('./../texts.js');
+const texts = require('../texts.js');
+const srcProfile = require('../src_profile.js');
 const notifications = require('./../notifications.js');
 
 exports.getAuthUrl = (identifier, objData = {}) => {
@@ -82,8 +83,10 @@ function checkAuthAndPostVerificationRequest(transaction_id, device_address, use
 	mutex.lock(['tx-' + transaction_id], (unlock) => {
 		db.query(
 			`SELECT 
-				vi_status
+				vi_status, 
+				(SELECT src_profile FROM private_profiles WHERE private_profiles.address = receiving_addresses.user_address LIMIT 1) AS src_profile
 			FROM transactions
+			JOIN receiving_addresses USING(receiving_address)
 			WHERE transaction_id=?`,
 			[transaction_id],
 			(rows) => {
@@ -92,15 +95,19 @@ function checkAuthAndPostVerificationRequest(transaction_id, device_address, use
 					unlock();
 					return onDone();
 				}
+				
+				srcProfile.parseSrcProfile(row);
 
 				api.checkAuthAndGetVerifyInvestorUserId(`ua${user_address}_${device_address}`, (err, vi_user_id) => {
 					if (err || !vi_user_id) {
+						console.log(`checkAuthAndGetVerifyInvestorUserId ua${user_address}_${device_address}: ${err}`);
 						unlock();
 						return onDone();
 					}
 
-					api.postVerificationRequest(vi_user_id, user_address, (err, vi_vr_id) => {
+					api.postVerificationRequest(vi_user_id, user_address, row.src_profile, (err, vi_vr_id) => {
 						if (err) {
+							console.log(`postVerificationRequest ua${user_address}_${device_address}: ${err}`);
 							unlock();
 							return onDone();
 						}
@@ -144,6 +151,7 @@ exports.pollVerificationResults = (handleVerificationResult) => {
 function checkUserVerificationRequest(transaction_id, device_address, vi_user_id, vi_vr_id, handleResult = () => {}) {
 	const mutex = require('byteballcore/mutex.js');
 	const device = require('byteballcore/device.js');
+	console.log('checkUserVerificationRequest '+transaction_id);
 	mutex.lock(['tx-' + transaction_id], (unlock) => {
 		db.query(
 			`SELECT 
@@ -168,7 +176,7 @@ function checkUserVerificationRequest(transaction_id, device_address, vi_user_id
 					if (statusCode === 404) {
 
 						// check if the verify investor server is answers correct
-						api.sendRequest(api.getUrnByKey('api'), (err, response, body) => {
+						return api.sendRequest(api.getUrnByKey('api'), (err, response, body) => {
 							if (err) {
 								notifications.notifyAdmin(`sendRequest api error`, err);
 								unlock();
@@ -181,7 +189,7 @@ function checkUserVerificationRequest(transaction_id, device_address, vi_user_id
 								return handleResult(response.statusCode);
 							}
 
-							return db.query(
+							db.query(
 								`UPDATE transactions
 								SET vi_status='in_authentication'
 								WHERE transaction_id=?`,
@@ -216,7 +224,7 @@ function checkUserVerificationRequest(transaction_id, device_address, vi_user_id
 						return handleResult(null, false);
 					}
 
-					if (exports.checkIfVerificationRequestStatusIsNeutral(vi_vr_status)) {
+					if (exports.checkIfVerificationRequestStatusIsPending(vi_vr_status)) {
 						unlock();
 						return handleResult(null, false);
 					}
@@ -247,7 +255,7 @@ function checkUserVerificationRequest(transaction_id, device_address, vi_user_id
 	});
 }
 
-exports.checkIfVerificationRequestStatusIsNeutral = (status) => {
+exports.checkIfVerificationRequestStatusIsPending = (status) => {
 	switch (status) {
 		case 'waiting_for_investor_acceptance':
 		case 'accepted_by_investor':

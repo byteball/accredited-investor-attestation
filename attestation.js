@@ -14,6 +14,7 @@ const conversion = require('./modules/conversion');
 const investorAttestation = require('./modules/investor_attestation');
 const notifications = require('./modules/notifications');
 const verifyInvestor = require('./modules/verifyinvestor');
+const srcProfile = require('./modules/src_profile.js');
 
 const server = require('./modules/server');
 
@@ -109,7 +110,7 @@ function handleWalletReady() {
 				setInterval(investorAttestation.retryPostingAttestations, 10*1000);
 				setInterval(reward.retrySendingRewards, 10*1000);
 				setInterval(moveFundsToAttestorAddresses, 60*1000);
-				setInterval(verifyInvestor.retryCheckAuthAndPostVerificationRequest, 60*1000);
+				setInterval(verifyInvestor.retryCheckAuthAndPostVerificationRequest, 10*1000);
 				setInterval(pollVerificationResults, 600*1000);
 			});
 		});
@@ -345,16 +346,15 @@ function handleTransactionsBecameStable(arrUnits) {
 		`SELECT 
 			transaction_id, 
 			device_address, user_address,
-			src_profile
+			(SELECT src_profile FROM private_profiles WHERE private_profiles.address = receiving_addresses.user_address LIMIT 1) AS src_profile
 		FROM transactions
 		JOIN receiving_addresses USING(receiving_address)
-		LEFT JOIN private_profiles ON private_profiles.address = receiving_addresses.user_address 
 		WHERE payment_unit IN(?)`,
 		[arrUnits],
 		(rows) => {
 			rows.forEach((row) => {
 
-				parseSrcProfile(row, row.device_address);
+				srcProfile.parseSrcProfile(row);
 
 				db.query(
 					`UPDATE transactions 
@@ -574,7 +574,7 @@ function readUserInfo (device_address, callback) {
 			if (rows.length) {
 				let row = rows[0];
 
-				parseSrcProfile(row, device_address);
+				srcProfile.parseSrcProfile(row);
 
 				callback(row);
 			} else {
@@ -586,22 +586,6 @@ function readUserInfo (device_address, callback) {
 	);
 }
 
-function parseSrcProfile(row, device_address) {
-	if (!conf.bRequireRealName) {
-		row.src_profile = {};
-	} else {
-		if (!row.src_profile) {
-			row.src_profile = {};
-		} else {
-			try {
-				row.src_profile = JSON.parse(row.src_profile);
-			} catch (err) {
-				notifications.notifyAdmin('error parsing src_profile', `device_address: ${device_address}, profile: ${row.src_profile}`);
-				row.src_profile = {};
-			}
-		}
-	}
-}
 
 /**
  * read or assign receiving address
