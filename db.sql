@@ -87,7 +87,7 @@ CREATE TABLE referral_reward_units (
 	user_address CHAR(32) NOT NULL,
 	vi_user_id INTEGER NOT NULL,
 	new_vi_user_id INTEGER NOT NULL UNIQUE,
-	new_user_address CHAR(44) NOT NULL UNIQUE,
+	new_user_address CHAR(32) NOT NULL UNIQUE,
 	reward INT NOT NULL,
 	reward_unit CHAR(44) NULL UNIQUE,
 	reward_date TIMESTAMP NULL,
