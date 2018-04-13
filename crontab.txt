@@ -1,0 +1,1 @@
+*/20 * * * * cd accredited-investor-attestation; node check_daemon.js 1>>~/.config/accredited-investor-attestation/check_daemon.log 2>>~/.config/accredited-investor-attestation/check_daemon.err
