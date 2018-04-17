@@ -31,6 +31,7 @@ exports.from_email = '';
 exports.bRunWitness = false;
 exports.THRESHOLD_DISTANCE = 20;
 exports.MIN_AVAILABLE_WITNESSINGS = 100;
+exports.bPostTimestamp = true;
 
 // verifyinvestor.com service
 exports.verifyInvestorUrl = 'https://verifyinvestor.com';
