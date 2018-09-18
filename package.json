@@ -9,7 +9,6 @@
     "body-parser": "1.18.2",
     "byteball-witness": "git+https://github.com/byteball/byteball-witness.git",
     "byteballcore": "git+https://github.com/byteball/byteballcore.git",
-    "emailjs": "2.0.0",
     "express": "4.16.2",
     "headless-byteball": "git+https://github.com/byteball/headless-byteball.git",
     "lodash": "4.17.5",

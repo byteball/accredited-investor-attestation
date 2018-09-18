@@ -79,9 +79,6 @@ function handleWalletReady() {
 		/**
 		 * check if config is filled correct
 		 */
-		if (conf.bUseSmtp && (!conf.smtpHost || !conf.smtpUser || !conf.smtpPassword)) {
-			error += texts.errorConfigSmtp();
-		}
 		if (!conf.admin_email || !conf.from_email) {
 			error += texts.errorConfigEmail();
 		}
