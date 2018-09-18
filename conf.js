@@ -34,7 +34,7 @@ exports.MIN_AVAILABLE_WITNESSINGS = 100;
 exports.bPostTimestamp = true;
 
 // verifyinvestor.com service
-exports.verifyInvestorUrl = 'https://verifyinvestor.com';
+exports.verifyInvestorUrl = 'https://www.verifyinvestor.com';
 exports.verifyInvestorApiToken = '';
 exports.verifyInvestorUserAuthorizationToken = '';
 
