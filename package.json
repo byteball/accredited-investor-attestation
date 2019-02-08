@@ -6,12 +6,12 @@
   "author": "temikn <temikng@gmail.com>",
   "license": "MIT",
   "dependencies": {
-    "body-parser": "1.18.2",
+    "body-parser": "^1.18.2",
     "byteball-witness": "git+https://github.com/byteball/byteball-witness.git",
     "byteballcore": "git+https://github.com/byteball/byteballcore.git",
-    "express": "4.16.2",
+    "express": "^4.16.2",
     "headless-byteball": "git+https://github.com/byteball/headless-byteball.git",
-    "lodash": "4.17.5",
-    "request": "2.83.0"
+    "lodash": "^4.17.11",
+    "request": "^2.83.0"
   }
 }
