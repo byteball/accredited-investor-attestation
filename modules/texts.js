@@ -1,7 +1,7 @@
 /*jslint node: true */
 'use strict';
-const desktopApp = require('byteballcore/desktop_app.js');
-const conf = require('byteballcore/conf');
+const desktopApp = require('ocore/desktop_app.js');
+const conf = require('ocore/conf');
 
 /**
  * responses for clients
@@ -9,7 +9,7 @@ const conf = require('byteballcore/conf');
 exports.greeting = () => {
 	return [
 		"Here you can attest yourself as accredited investor.  This will allow you to invest in ICOs that are available for accredited investors only.\n",
-		"A proof of attestation of your Byteball address will be posted publicly on the distributed ledger.  Your name will not be published.\n\n",
+		"A proof of attestation of your Obyte address will be posted publicly on the distributed ledger.  Your name will not be published.\n\n",
 
 		`The price of attestation is $${conf.priceInUSD.toLocaleString([], {minimumFractionDigits: 2})}. `,
 		"The payment is nonrefundable even if the attestation fails for any reason.\n\n",
@@ -57,7 +57,7 @@ exports.insertMyAddress = () => {
 };
 
 exports.requireInsertProfileData = () => {
-	return 'You have to provide your attested profile, just Byteball address is not enough.';
+	return 'You have to provide your attested profile, just Obyte address is not enough.';
 };
 exports.requireInsertBBAddress = () => {
 	return 'Private profile is not required';
@@ -134,7 +134,7 @@ exports.attestedSuccessFirstTimeBonus = (rewardInBytes) => {
 		"You requested an attestation for the first time and will receive a welcome bonus ",
 		`of $${conf.rewardInUSD.toLocaleString([], {minimumFractionDigits: 2})} `,
 		`(${(rewardInBytes/1e9).toLocaleString([], {maximumFractionDigits: 9})} GB) `,
-		"from Byteball distribution fund."
+		"from Obyte distribution fund."
 	].join('')
 };
 
@@ -143,8 +143,8 @@ exports.referredUserBonus = (referralRewardInBytes) => {
 		"You referred a user who has just verified his identity and you will receive a reward ",
 		`of $${conf.referralRewardInUSD.toLocaleString([], {minimumFractionDigits: 2})} `,
 		`(${(referralRewardInBytes/1e9).toLocaleString([], {maximumFractionDigits: 9})} GB) `,
-		"from Byteball distribution fund.\n",
-		"Thank you for bringing in a new byteballer, the value of the ecosystem grows with each new user!"
+		"from Obyte distribution fund.\n",
+		"Thank you for bringing in a new obyter, the value of the ecosystem grows with each new user!"
 	].join('');
 };
 

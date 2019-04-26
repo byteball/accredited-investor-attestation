@@ -1,7 +1,7 @@
 /*jslint node: true */
 'use strict';
 const request = require('request');
-const conf = require('byteballcore/conf.js');
+const conf = require('ocore/conf.js');
 const notifications = require('./../notifications.js');
 
 const API_TOKEN = conf.verifyInvestorApiToken;
@@ -52,7 +52,7 @@ exports.postVerificationRequest = (vi_user_id, user_address, src_profile, onDone
 			method: 'POST',
 			urn: getUrnByKey('user_verification_requests', vi_user_id),
 			form: {
-			//	deal_name: `Byteball address ${user_address}`,
+			//	deal_name: `Obyte address ${user_address}`,
 				deal_name: `Security tokens`,
 				legal_name: (src_profile.first_name && src_profile.last_name) ? src_profile.first_name[0] + ' ' + src_profile.last_name[0] : ''
 			}
@@ -164,7 +164,7 @@ function sendRequest(options, callback) {
 		headers: {
 			'Authorization': `Token ${API_TOKEN}`,
 			"Content-Type": "application/json",
-			"User-Agent": "Byteball attestation/1.0"
+			"User-Agent": "Obyte attestation/1.0"
 		}
 	}, options);
 	request(resultOptions, (err, request, body) => callback(err, request, body, resultOptions));

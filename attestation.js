@@ -1,13 +1,13 @@
 /*jslint node: true */
 'use strict';
 const _ = require('lodash');
-const constants = require('byteballcore/constants.js');
-const conf = require('byteballcore/conf');
-const db = require('byteballcore/db');
-const eventBus = require('byteballcore/event_bus');
-const privateProfile = require('byteballcore/private_profile');
-const validationUtils = require('byteballcore/validation_utils');
-const headlessWallet = require('headless-byteball');
+const constants = require('ocore/constants.js');
+const conf = require('ocore/conf');
+const db = require('ocore/db');
+const eventBus = require('ocore/event_bus');
+const privateProfile = require('ocore/private_profile');
+const validationUtils = require('ocore/validation_utils');
+const headlessWallet = require('headless-obyte');
 const texts = require('./modules/texts');
 const reward = require('./modules/reward');
 const conversion = require('./modules/conversion');
@@ -37,7 +37,7 @@ eventBus.once('headless_wallet_ready', handleWalletReady);
 
 function handleHeadlessAndRatesReady() {
 	if (conf.bRunWitness) {
-		require('byteball-witness');
+		require('obyte-witness');
 		eventBus.emit('headless_wallet_ready');
 	} else {
 		headlessWallet.setupChatEventHandlers();
@@ -122,7 +122,7 @@ function handleVerificationResult(err, transaction_id) {
 	if (err || !transaction_id) {
 		return;
 	}
-	let device = require('byteballcore/device.js');
+	let device = require('ocore/device.js');
 
 	db.query(
 		`SELECT user_address, vi_user_id, device_address, payment_unit
@@ -209,7 +209,7 @@ function handleVerificationResult(err, transaction_id) {
 }
 
 function moveFundsToAttestorAddresses() {
-	let network = require('byteballcore/network.js');
+	let network = require('ocore/network.js');
 	if (network.isCatchingUp())
 		return;
 
@@ -230,7 +230,7 @@ function moveFundsToAttestorAddresses() {
 
 			let arrAddresses = rows.map(row => row.receiving_address);
 			// console.error(arrAddresses, investorAttestation.investorAttestorAddress);
-			let headlessWallet = require('headless-byteball');
+			let headlessWallet = require('headless-obyte');
 			headlessWallet.sendMultiPayment({
 				asset: null,
 				to_address: investorAttestation.investorAttestorAddress,
@@ -239,7 +239,7 @@ function moveFundsToAttestorAddresses() {
 			}, (err, unit) => {
 				if (err) {
 					console.error("failed to move funds: " + err);
-					let balances = require('byteballcore/balances');
+					let balances = require('ocore/balances');
 					balances.readBalance(arrAddresses[0], (balance) => {
 						console.error('balance', balance);
 						notifications.notifyAdmin('failed to move funds', err + ", balance: " + JSON.stringify(balance));
@@ -253,7 +253,7 @@ function moveFundsToAttestorAddresses() {
 }
 
 function handleNewTransactions(arrUnits) {
-	let device = require('byteballcore/device.js');
+	let device = require('ocore/device.js');
 	db.query(
 		`SELECT
 			amount, asset, unit,
@@ -338,7 +338,7 @@ function handleNewTransactions(arrUnits) {
 }
 
 function handleTransactionsBecameStable(arrUnits) {
-	let device = require('byteballcore/device.js');
+	let device = require('ocore/device.js');
 	db.query(
 		`SELECT 
 			transaction_id, 
@@ -379,7 +379,7 @@ function handleTransactionsBecameStable(arrUnits) {
  * @param response
  */
 function respond (from_address, text, response = '') {
-	let device = require('byteballcore/device.js');
+	let device = require('ocore/device.js');
 	readUserInfo(from_address, (userInfo) => {
 
 		function checkUserAddress(onDone) {
@@ -591,7 +591,7 @@ function readUserInfo (device_address, callback) {
  * @param callback
  */
 function readOrAssignReceivingAddress(device_address, userInfo, callback) {
-	const mutex = require('byteballcore/mutex.js');
+	const mutex = require('ocore/mutex.js');
 	mutex.lock([device_address], (unlock) => {
 		db.query(
 			`SELECT receiving_address, ${db.getUnixTimestamp('last_price_date')} AS price_ts

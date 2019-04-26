@@ -1,4 +1,4 @@
-const conf = require('byteballcore/conf');
+const conf = require('ocore/conf');
 
 function parseSrcProfile(row) {
 	if (!conf.bRequireRealName) {

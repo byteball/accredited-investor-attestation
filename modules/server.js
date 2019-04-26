@@ -1,6 +1,6 @@
 const express = require('express');
 const bodyParser = require('body-parser');
-const db = require('byteballcore/db');
+const db = require('ocore/db');
 const notifications = require('./notifications');
 const verifyInvestor = require('./verifyinvestor');
 const texts = require('./texts');
@@ -35,8 +35,8 @@ app.post('*/cb', (req, res) => {
 				return;
 			}
 
-			const mutex = require('byteballcore/mutex.js');
-			const device = require('byteballcore/device.js');
+			const mutex = require('ocore/mutex.js');
+			const device = require('ocore/device.js');
 			let row = rows[0];
 			let {transaction_id, device_address} = row;
 			let {status: vi_vr_status} = body;

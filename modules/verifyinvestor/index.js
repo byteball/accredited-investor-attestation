@@ -1,7 +1,7 @@
 /*jslint node: true */
 'use strict';
-const db = require('byteballcore/db');
-const conf = require('byteballcore/conf');
+const db = require('ocore/db');
+const conf = require('ocore/conf');
 const api = require('./api');
 const texts = require('../texts.js');
 const srcProfile = require('../src_profile.js');
@@ -78,8 +78,8 @@ exports.retryCheckAuthAndPostVerificationRequest = () => {
 };
 
 function checkAuthAndPostVerificationRequest(transaction_id, device_address, user_address, onDone = () => {}) {
-	const mutex = require('byteballcore/mutex.js');
-	const device = require('byteballcore/device.js');
+	const mutex = require('ocore/mutex.js');
+	const device = require('ocore/device.js');
 	mutex.lock(['tx-' + transaction_id], (unlock) => {
 		db.query(
 			`SELECT 
@@ -149,8 +149,8 @@ exports.pollVerificationResults = (handleVerificationResult) => {
 };
 
 function checkUserVerificationRequest(transaction_id, device_address, vi_user_id, vi_vr_id, handleResult = () => {}) {
-	const mutex = require('byteballcore/mutex.js');
-	const device = require('byteballcore/device.js');
+	const mutex = require('ocore/mutex.js');
+	const device = require('ocore/device.js');
 	console.log('checkUserVerificationRequest '+transaction_id);
 	mutex.lock(['tx-' + transaction_id], (unlock) => {
 		db.query(
