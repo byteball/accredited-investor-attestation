@@ -57,7 +57,8 @@ function postAndWriteAttestation(transaction_id, attestor_address, attestation_p
 						[unit, transaction_id],
 						() => {
 							let device = require('ocore/device.js');
-							let text = `Now you are attested as accredited investor, see the attestation unit: https://explorer.obyte.org/#${unit}`;
+							let explorer = (process.env.testnet ? 'https://testnetexplorer.obyte.org/#' : 'https://explorer.obyte.org/#');
+							let text = `Now you are attested as accredited investor, see the attestation unit: ${explorer}${unit}`;
 
 							text += "\n\n" + texts.weHaveReferralProgram();
 							device.sendMessageToDevice(row.device_address, 'text', text);
