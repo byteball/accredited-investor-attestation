@@ -53,7 +53,7 @@ exports.referralRewardInUSD = 20;
 exports.PRICE_TIMEOUT = 24*3600; // in seconds
 
 exports.bRequireRealName = true;
-exports.arrRealNameAttestors = ['I2ADHGP4HL6J37NQAD73J7E5SKFIXJOT', 'OHVQ2R5B6TUR5U7WJNYLP3FIOSR7VCED'];
+exports.arrRealNameAttestors = ['I2ADHGP4HL6J37NQAD73J7E5SKFIXJOT', 'JFKWGRMXP3KHUAFMF4SJZVDXFL6ACC6P', 'OHVQ2R5B6TUR5U7WJNYLP3FIOSR7VCED'];
 exports.objMapRequiredVIPersonalDataWithProfile = { // match verify investor data with private profile data
 	'first_name': {
 		name: 'first name',
